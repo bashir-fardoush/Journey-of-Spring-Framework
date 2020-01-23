@@ -3,6 +3,8 @@ package com.fardoushlab.mavenspring.services;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.fardoushlab.mavenspring.exception.ResourceAlreadyExistsException;
+import com.fardoushlab.mavenspring.exception.ResourceNotFoundException;
 import com.fardoushlab.mavenspring.model.Course;
 
 public class CourseService {
@@ -46,7 +48,7 @@ public class CourseService {
 				.stream()
 				.filter(course-> course.getCourseCode().equals(c.getCourseCode()))
 				.findAny().isPresent()) {
-			throw new RuntimeException("No course found with this code");
+			throw new ResourceAlreadyExistsException("Course already exists");
 			
 		}
 		
@@ -61,7 +63,7 @@ public class CourseService {
 			.stream()
 			.filter(course->course.getCourseCode().equals(courseCode) )
 			.findAny()
-			.orElseThrow(() -> new RuntimeException("No course found with this code"));
+			.orElseThrow(() -> new ResourceNotFoundException("No course found with this code"));
 	}
 	
 	public List<Course> getAllCourses(){

@@ -4,7 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Stream;
 
-
+import com.fardoushlab.mavenspring.exception.ResourceAlreadyExistsException;
+import com.fardoushlab.mavenspring.exception.ResourceNotFoundException;
 import com.fardoushlab.mavenspring.model.Country;
 
 public class CountryService {
@@ -52,7 +53,7 @@ public class CountryService {
 				.filter(country-> country.getCountryCode().equals(c.getCountryCode()))
 				.findAny().isPresent()) {
 			
-			throw new RuntimeException("Country exists in list");
+			throw new ResourceAlreadyExistsException("Country exists in list");
 		}
 		
 	
@@ -62,7 +63,8 @@ public class CountryService {
 		return countries.stream()
 				.filter(country-> country.getCountryCode().equals(countryCode))
 				.findAny()
-				.orElseThrow(()->new RuntimeException("Country not found with this code"));
+				.orElseThrow(()-> new ResourceNotFoundException("Country not found with this code"));
+		
 				
 	}
 	
