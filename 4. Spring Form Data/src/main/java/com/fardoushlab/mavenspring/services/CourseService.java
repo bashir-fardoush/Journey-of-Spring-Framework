@@ -51,13 +51,27 @@ public class CourseService {
 			throw new ResourceAlreadyExistsException("Course already exists");
 			
 		}
-		
-		
-		
-		
+			
+	
 	}
 	
-	public Course getCourseById(String courseCode) {
+	public void saveEditedCourse (Course c) {
+		 courses
+				.stream()
+				.filter(course->course.getCourseCode().equals(c.getCourseCode()) )
+				.findAny().get().setCourseName(c.getCourseName());
+	}
+	
+	public void deleteCourseByCourseCode(String courseCode) {
+		for(int i = 0; i< courses.size(); i++) {
+			if(courses.get(i).getCourseCode().equals(courseCode)) {
+				courses.remove(i);
+				break;
+			}
+		}
+	}
+	
+	public Course getCourseByCourseCode(String courseCode) {
 		
 		return courses
 			.stream()
