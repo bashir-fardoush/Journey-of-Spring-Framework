@@ -76,7 +76,7 @@ public class CourseController {
 	@GetMapping("/course/delete")
 	public String deleteCourseByCourseCode(Model model, @RequestParam("courseCode") String courseCode) {
 		
-		courseService.deleteCourseByCourseCode(courseCode);
+	//	courseService.deleteCourseByCourseCode(courseCode);
 		model.addAttribute("message","Course deleted successfully");	
 					
 		return "redirect:/course/courses";

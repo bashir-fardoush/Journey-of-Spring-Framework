@@ -20,7 +20,7 @@ public class CountryController {
 	CountryService countryService;
 	
 	@GetMapping("/country/add")
-	public String getAddCountryPage(Model model) {
+public String getAddCountryPage(Model model) {
 		
 		model.addAttribute("country", new Country());
 		model.addAttribute("message", "Please add a country");
@@ -32,7 +32,7 @@ public class CountryController {
 	@PostMapping("/country/add")
 	public String addCountry(Model model, @ModelAttribute(name = "country") Country country) {
 		
-		countryService.addCountry(country);
+		//countryService.addCountry(country);
 		model.addAttribute("message", "Country added successfully");
 		
 	//	return "redirect:/country/show-all";/country/countries
@@ -50,7 +50,7 @@ public class CountryController {
 		
 	}*/
 	
-	@GetMapping("/country/countries")
+ @GetMapping("/country/countries")
 	public String showCountries(Model model) {
 		
 		model.addAttribute("country_list",countryService.getAll());
@@ -72,8 +72,8 @@ public class CountryController {
 	
 	@GetMapping("/country/edit")
 	public String editCountry(Model model, @RequestParam("countryCode") String code) {
-		
-		model.addAttribute("country", countryService.getCountryByCode(code));
+		Country country = countryService.getCountryByCode(code);
+		model.addAttribute("country", country);
 		model.addAttribute("message", code);		 
 		
 		return "country/edit";
@@ -98,5 +98,4 @@ public class CountryController {
 		return "redirect:/country/countries";
 	}
 
-	
 }
