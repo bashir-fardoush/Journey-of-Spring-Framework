@@ -16,10 +16,10 @@ public class Student implements Serializable  {
 	private long id;
 	private String name;
 	private int age;
-	//private List<Course> courses;
+	private List<Course> courses;
 	private String gender;
 	private String email;
-	//private List<Country> country;
+	private Country country;
 	
 	
 	public Student() {
@@ -27,17 +27,17 @@ public class Student implements Serializable  {
 	}
 
 
-	public Student(long id, String name, int age,/* List<Course> courses,*/ String gender, String email/*,
-			List<Country> country*/) {
+	public Student(long id, String name, int age, List<Course> courses, String gender, String email,
+			Country country) {
 		super();
 		this.id = id;
 		this.name = name;
 		this.age = age;
-		//this.courses = courses;
+		this.courses = courses;
 		this.email = email;
 		this.gender = gender;
 		
-	//	this.country = country;
+		this.country = country;
 	}
 
 
@@ -70,7 +70,7 @@ public class Student implements Serializable  {
 		this.age = age;
 	}
 
-/*
+
 	public List<Course> getCourses() {
 		return courses;
 	}
@@ -78,7 +78,7 @@ public class Student implements Serializable  {
 
 	public void setCourses(List<Course> courses) {
 		this.courses = courses;
-	}*/
+	}
 
 
 	public String getGender() {
@@ -103,27 +103,21 @@ public class Student implements Serializable  {
 
 	@Override
 	public String toString() {
-		return "Student [id=" + id + ", name=" + name + ", age=" + age + ", gender=" + gender + ", email=" + email
-				+ "]";
+		return "Student [id=" + id + ", name=" + name + ", age=" + age + ", courses=" + courses + ", gender=" + gender
+				+ ", email=" + email + ", country=" + country + "]";
 	}
 
-/*
-	public List<Country> getCountry() {
+
+	public Country getCountry() {
 		return country;
 	}
 
 
-	public void setCountry(List<Country> country) {
+	public void setCountry(Country country) {
 		this.country = country;
-	}*/
+	}
 
-/*
-	@Override
-	public String toString() {
-		return "Student [id=" + id + ", name=" + name + ", age=" + age + ", courses=" + courses + ", gender=" + gender
-				+ ", email=" + email + ", country=" + country + "]";
-	}*/
-	
+
 	
 	
 	

@@ -32,7 +32,7 @@ public String getAddCountryPage(Model model) {
 	@PostMapping("/country/add")
 	public String addCountry(Model model, @ModelAttribute(name = "country") Country country) {
 		
-		//countryService.addCountry(country);
+		countryService.addCountry(country);
 		model.addAttribute("message", "Country added successfully");
 		
 	//	return "redirect:/country/show-all";/country/countries

@@ -3,6 +3,7 @@ package com.fardoushlab.mavenspring.services;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Random;
 import java.util.stream.Stream;
 
 import javax.transaction.Transactional;
@@ -50,6 +51,9 @@ public class CountryService {
 		var transection = session.beginTransaction();
 		
 		country.setCountryCode(country.getCountryCode().trim().toUpperCase());
+		Random random = new Random();
+		int randomInteger = random.nextInt();
+		country.setId(randomInteger);
 		
 		try {			
 			session.save(country);
@@ -97,12 +101,18 @@ public class CountryService {
 		var session = hibernateConfig.getSession();
 		var transection = session.beginTransaction();
 			
-		var query = session.getEntityManagerFactory().createEntityManager()
-				.createQuery("update c com.fardoushlab.mavenspring.model.Country c set countryName := countryName where countryCode:= countryCode ", Country.class)
-				.setParameter("countryCode", c.getCountryCode())
-				.setParameter("countryName", c.getCountryName());
+		/*var query = session.getEntityManagerFactory().createEntityManager()
+				.createQuery("update com.fardoushlab.mavenspring.model.Country c set c.countryName =:cName where countryCode=:cCode", Country.class)
+				.setParameter("cCode", c.getCountryCode())
+				.setParameter("cName", c.getCountryName());*/
+		
+		var query = session.createQuery("update Country  set countryName =:cName where countryCode=:cCode");
+		query.setParameter("cCode", c.getCountryCode());
+		query.setParameter("cName", c.getCountryName());
+		
 		try {
-			session.update(c);
+		int val = query.executeUpdate();
+		
 			transection.commit();			
 		}catch(HibernateException e) {
 			
@@ -159,13 +169,16 @@ public class CountryService {
 		var session = hibernateConfig.getSession();
 		var transection = session.beginTransaction();
 		
-	var query = session.getEntityManagerFactory().createEntityManager()
+	/*var query = session.getEntityManagerFactory().createEntityManager()
 			.createQuery("delete c from com.fardoushlab.mavenspring.model.Country"
 					+ " c where countryCode:= countryCode",Country.class)
-			.setParameter("countryCode", countryCode);
+			.setParameter("countryCode", countryCode);*/
+	
+		var query = session.createQuery("delete Country  where countryCode=:cCode");
+		query.setParameter("cCode", countryCode);
 	
 		try {			
-			 query.executeUpdate();
+			query.executeUpdate();
 			 
 		}catch(HibernateException e) {
 			

@@ -18,7 +18,7 @@ public class Country implements Serializable  {
 	
 	
 	public Country() {
-		super();
+		
 	}
 
 
