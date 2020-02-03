@@ -8,11 +8,11 @@ import org.springframework.web.bind.annotation.RequestParam;
 @Controller
 public class AppController {
 
-	@GetMapping("/index")
+	/*@GetMapping("/index")
 	public String hello() {
 		
 		return "index";		
-	}
+	}*/
 	
 	@GetMapping("/userPage")
 	public String showUser(@RequestParam("userName") String userName, Model model){

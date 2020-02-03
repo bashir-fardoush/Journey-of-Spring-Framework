@@ -39,6 +39,12 @@ body{
 	padding: 5px 10px;
 }
 
+.display-block{
+  
+    display: inline-block;
+   
+}
+
 .input-right{
 	position: absolute;
 	right: 10px;

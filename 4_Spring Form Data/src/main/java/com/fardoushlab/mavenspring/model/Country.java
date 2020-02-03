@@ -2,18 +2,25 @@ package com.fardoushlab.mavenspring.model;
 
 import java.io.Serializable;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.Table;
 
 @Entity
+@Table(name="country")
 public class Country implements Serializable  {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.SEQUENCE)
 	private int id;
+	
+	@Column(name="country_code", unique=true, nullable=false, updatable=false)
 	private String countryCode;
+	
+	@Column(name="country_name", nullable=false)
 	private String countryName;
 	
 	
