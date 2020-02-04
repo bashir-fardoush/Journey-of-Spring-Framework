@@ -21,6 +21,7 @@ public class GlobalExceptionHandler {
 	public String  handleConflict(HttpServletRequest req,  Exception e, Model model) {
 		
 		model.addAttribute("message",e.getMessage());		
+		e.printStackTrace();
 		return "error";
 	}
 	
@@ -29,6 +30,7 @@ public class GlobalExceptionHandler {
 	public String handleResourceNotFoundException(HttpServletRequest req,  Exception e, Model model) {
 		
 		model.addAttribute("message",e.getMessage());
+		e.printStackTrace();
 		return "error";
 	}
 	
@@ -36,7 +38,8 @@ public class GlobalExceptionHandler {
 	@ExceptionHandler(RuntimeException.class)
 	public String  handleRuntimeExcepton(HttpServletRequest req,  Exception e, Model model) {
 		
-		model.addAttribute("message",e.getMessage());		
+		model.addAttribute("message",e.getMessage());	
+		e.printStackTrace();
 		return "error";
 	}
 

@@ -35,10 +35,10 @@ public class Student implements Serializable  {
 	@Column(name="age")
 	private int age;
 	
-	@OneToMany(targetEntity = Course.class, cascade= {CascadeType.ALL})
+	@ManyToMany(targetEntity = Course.class, cascade= {CascadeType.ALL})
 	@JoinTable(name="student_course_map",
-			joinColumns = {@JoinColumn(name="s_id")},
-			inverseJoinColumns = {@JoinColumn(name="c_id")})
+			joinColumns = @JoinColumn(name = "student_id", referencedColumnName = "id"), 
+			inverseJoinColumns = @JoinColumn(name = "course_id", referencedColumnName = "id"))
 	private List<Course> courses;
 	
 	@Column(name="gender")

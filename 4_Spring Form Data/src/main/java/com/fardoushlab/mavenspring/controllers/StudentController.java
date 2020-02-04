@@ -1,6 +1,7 @@
 package com.fardoushlab.mavenspring.controllers;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -16,6 +17,8 @@ import com.fardoushlab.mavenspring.model.Student;
 import com.fardoushlab.mavenspring.services.CountryService;
 import com.fardoushlab.mavenspring.services.CourseService;
 import com.fardoushlab.mavenspring.services.StudentService;
+
+
 
 @Controller
 public class StudentController {
@@ -75,5 +78,42 @@ public class StudentController {
 		return "index";
 	}
 	
+	@GetMapping("/student/edit")
+	public String editStudent(Model model, @RequestParam("id") int studentId){
+		
+		var student = studentService.getStudentById(studentId);
+		 List<String> courseCodes = new ArrayList<String>();
+		 
+		 student.getCourses().forEach(course->{
+			 courseCodes.add(course.getCourseCode());
+		});
+		 
+		 student.setCourseCodes(courseCodes);
+		
+		model.addAttribute("student",student);
+		model.addAttribute("countries",countryService.getAll());
+		model.addAttribute("courses",courseService.getAllCourses());
+		
+		
+		return "student/edit";
+	}
+	
+	@PostMapping("/student/edit")
+	public String saveEditedStudent(Model model, @ModelAttribute("student") Student student) {
+		
+		studentService.saveEditedStudent(student);
+		
+		model.addAttribute("message","testing");
+		return "redirect:/index";
+	}
+	
+	@GetMapping("/student/delete")
+	public String deleteStudent(Model model, @RequestParam("id") int studentId){
+		
+		studentService.deleteStudentById(studentId);
+		model.addAttribute("message","Student deleted sucessfully");
+		
+		return "redirect:/index";
+	}
 	
 }

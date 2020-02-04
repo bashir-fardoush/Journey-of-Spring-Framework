@@ -4,6 +4,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaDelete;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Root;
 import javax.transaction.Transactional;
 
 import org.hibernate.HibernateException;
@@ -13,6 +17,7 @@ import org.springframework.stereotype.Service;
 import com.fardoushlab.mavenspring.config.HibernateConfig;
 import com.fardoushlab.mavenspring.exception.ResourceAlreadyExistsException;
 import com.fardoushlab.mavenspring.exception.ResourceNotFoundException;
+import com.fardoushlab.mavenspring.model.Country;
 import com.fardoushlab.mavenspring.model.Course;
 
 @Service
@@ -42,10 +47,6 @@ public class CourseService {
 		var session = hibernateConfig.getSession();
 		var transection = session.beginTransaction();
 	
-		Random random = new Random();
-		int randomInteger = random.nextInt();
-		course.setId(randomInteger);
-		
 		session.save(course);
 		transection.commit();
 		session.close();
@@ -57,8 +58,19 @@ public class CourseService {
 		var session = hibernateConfig.getSession();
 		var transection = session.beginTransaction();
 		
-		var query = session.getEntityManagerFactory().createEntityManager().createQuery("select c from com.fardoushlab.mavenspring.model.Course c where courseCode:= courseCode",Course.class);
-		query.setParameter("courseCode", c.getCourseCode());
+		CriteriaBuilder criteriaBuilder = session.getCriteriaBuilder();
+		CriteriaQuery<Course> ccq = criteriaBuilder.createQuery(Course.class);
+		Root<Course> root = ccq.from(Course.class);
+		
+		ccq.where(criteriaBuilder.equal(root.get("courseCode"), c.getCourseCode()));
+		var query = session.getEntityManagerFactory().createEntityManager()
+				.createQuery(ccq);
+
+			
+		
+		
+	/*	var query = session.getEntityManagerFactory().createEntityManager().createQuery("select c from com.fardoushlab.mavenspring.model.Course c where courseCode:= courseCode",Course.class);
+		query.setParameter("courseCode", c.getCourseCode());*/
 		
 		if(query.getResultStream().findAny().isPresent()) {
 		
@@ -81,14 +93,21 @@ public class CourseService {
 		var session = hibernateConfig.getSession();
 		var transection = session.beginTransaction();
 		try {
-			
+			session.update(c);	
+			transection.commit();
 		}catch(HibernateException e) {
+			if(transection!= null) {
+				transection.rollback();
+			}
+			e.printStackTrace();
 			
+		}finally {
+			session.close();
 		}
 
-		session.update(c);		
-		transection.commit();
-		session.close();
+			
+		
+	
 
 	}
 	

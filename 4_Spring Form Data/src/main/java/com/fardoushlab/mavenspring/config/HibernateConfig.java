@@ -5,6 +5,7 @@ import java.io.InputStream;
 import java.util.Properties;
 
 import javax.persistence.Entity;
+import javax.persistence.criteria.CriteriaBuilder;
 
 import org.hibernate.Hibernate;
 import org.hibernate.HibernateException;
@@ -26,6 +27,14 @@ public class HibernateConfig {
 	public Session getSession() {
 		this.session = createAndGetLocalSessionFactoryBean().getCurrentSession();		
 		return session != null ? this.session : createAndGetLocalSessionFactoryBean().openSession();
+		
+	}
+	
+	public CriteriaBuilder getCriteriaBuilder() {
+		
+		Session session = getSession();
+		session.beginTransaction();
+		return session.getCriteriaBuilder();
 		
 	}
 	

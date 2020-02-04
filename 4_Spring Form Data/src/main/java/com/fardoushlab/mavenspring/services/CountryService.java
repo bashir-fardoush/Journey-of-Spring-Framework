@@ -6,6 +6,11 @@ import java.util.Map;
 import java.util.Random;
 import java.util.stream.Stream;
 
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaDelete;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.CriteriaUpdate;
+import javax.persistence.criteria.Root;
 import javax.transaction.Transactional;
 
 import org.hibernate.HibernateException;
@@ -17,6 +22,7 @@ import com.fardoushlab.mavenspring.exception.ResourceAlreadyExistsException;
 import com.fardoushlab.mavenspring.exception.ResourceNotFoundException;
 import com.fardoushlab.mavenspring.model.Country;
 import com.fardoushlab.mavenspring.model.Course;
+import com.fardoushlab.mavenspring.model.Student;
 import com.mysql.cj.log.Log;
 
 @Service
@@ -50,10 +56,10 @@ public class CountryService {
 		var session = hibernateConfig.getSession();
 		var transection = session.beginTransaction();
 		
-		country.setCountryCode(country.getCountryCode().trim().toUpperCase());
+	/*	country.setCountryCode(country.getCountryCode().trim().toUpperCase());
 		Random random = new Random();
 		int randomInteger = random.nextInt();
-		country.setId(randomInteger);
+		country.setId(randomInteger);*/
 		
 		try {			
 			session.save(country);
@@ -80,9 +86,18 @@ public class CountryService {
 		var session = hibernateConfig.getSession();
 		var transection = session.beginTransaction();
 		
-		var query = session.getEntityManagerFactory().createEntityManager()
+	/*	var query = session.getEntityManagerFactory().createEntityManager()
 			.createQuery("select c from com.fardoushlab.mavenspring.model.Country c where countryCode:= countryCode",Country.class);
-		query.setParameter("countryCode", c.getCountryCode());
+		query.setParameter("countryCode", c.getCountryCode());*/
+		
+		CriteriaBuilder criteriaBuilder = session.getCriteriaBuilder();
+		CriteriaQuery<Country> ccq = criteriaBuilder.createQuery(Country.class);
+		Root<Country> root = ccq.from(Country.class);
+		
+		ccq.where(criteriaBuilder.equal(root.get("countryCode"), c.getCountryCode()));
+		var query = session.getEntityManagerFactory().createEntityManager()
+				.createQuery(ccq);
+		
 		
 		if(query.getResultStream().findAny().isPresent()) {
 		
@@ -106,9 +121,28 @@ public class CountryService {
 				.setParameter("cCode", c.getCountryCode())
 				.setParameter("cName", c.getCountryName());*/
 		
-		var query = session.createQuery("update Country  set countryName =:cName where countryCode=:cCode");
-		query.setParameter("cCode", c.getCountryCode());
+		/*	var oldCountry = getCountryByCode(c.getCountryCode());
+			oldCountry.setCountryCode(c.getCountryName());*/
+				
+		/* var query = session.createQuery("update Country  set countryName =:cName where countryCode=:cCode");
+		query.setParameter("cCode", c.getCountryCode());		
 		query.setParameter("cName", c.getCountryName());
+		
+		 */
+		
+	CriteriaBuilder criteriaBuilder = session.getCriteriaBuilder();
+	CriteriaUpdate<Country> ccu = criteriaBuilder.createCriteriaUpdate(Country.class);
+	Root root = ccu.from(Country.class);	
+	ccu.set("countryName", c.getCountryName());
+	ccu.where(criteriaBuilder.equal(root.get("countryCode"), c.getCountryCode()));
+	
+	/*var query = session
+			.getEntityManagerFactory()
+			.createEntityManager()
+			.createQuery(ccu);
+			// it causes problem with criteria query: 
+			*/
+	var query = session.createQuery(ccu);
 		
 		try {
 		int val = query.executeUpdate();
@@ -127,15 +161,23 @@ public class CountryService {
 
 	}
 	
+	@Transactional
 	public Country getCountryByCode(String countryCode) {
 		
 		var session = hibernateConfig.getSession();
 		var transection = session.beginTransaction();
 		
-		var query = session.getEntityManagerFactory().createEntityManager()
-				.createQuery("select c from com.fardoushlab.mavenspring.model.Country c where countryCode =: countryCode",Country.class);
+		CriteriaBuilder criteriaBuilder = session.getCriteriaBuilder();
+		CriteriaQuery<Country> ccq = criteriaBuilder.createQuery(Country.class);
+		Root<Country> root = ccq.from(Country.class);
 		
-		query.setParameter("countryCode", countryCode);
+		ccq.where(criteriaBuilder.equal(root.get("countryCode"), countryCode));
+		var query = session.getEntityManagerFactory().createEntityManager()
+				.createQuery(ccq);
+		
+		/*var query = session.getEntityManagerFactory().createEntityManager()
+				.createQuery("select c from com.fardoushlab.mavenspring.model.Country c where countryCode =: countryCode",Country.class);
+		query.setParameter("countryCode", countryCode);*/
 		
 		var countryList = new ArrayList<Country>();
 		
@@ -151,10 +193,7 @@ public class CountryService {
 		}finally {
 			session.close();
 		}
-		
-		 
-	//	 query.getSingleResult()
-		
+				
 		if(countryList.size() <= 0) {
 			throw  new ResourceAlreadyExistsException("No country found");
 		}
@@ -164,18 +203,30 @@ public class CountryService {
 				
 	}
 	
+	@Transactional
 	public void deleteCountryByCode(String countryCode) {		
 		
 		var session = hibernateConfig.getSession();
 		var transection = session.beginTransaction();
 		
+		
+		
 	/*var query = session.getEntityManagerFactory().createEntityManager()
 			.createQuery("delete c from com.fardoushlab.mavenspring.model.Country"
 					+ " c where countryCode:= countryCode",Country.class)
 			.setParameter("countryCode", countryCode);*/
+		
+		
+	/*	var query = session.createQuery("delete Country  where countryCode=:cCode");
+		query.setParameter("cCode", countryCode); */
 	
-		var query = session.createQuery("delete Country  where countryCode=:cCode");
-		query.setParameter("cCode", countryCode);
+		CriteriaBuilder criteriaBuilder = session.getCriteriaBuilder();	
+		CriteriaDelete<Country> ccd = criteriaBuilder.createCriteriaDelete(Country.class);
+		Root<Country> root = ccd.from(Country.class);
+		ccd.where(criteriaBuilder.equal(root.get("countryCode"), countryCode));
+			
+		
+		var query = session.createQuery(ccd);
 	
 		try {			
 			query.executeUpdate();
@@ -201,10 +252,22 @@ public class CountryService {
 		var session = hibernateConfig.getSession();
 		var transection = session.beginTransaction();
 		
-		var query = session.getEntityManagerFactory()
+		/* var query = session.getEntityManagerFactory()
 				.createEntityManager()
 				.createQuery("select c from com.fardoushlab.mavenspring.model.Country c", Country.class);
+	 */
+		
+		CriteriaBuilder criteriaBuilder = session.getCriteriaBuilder();
+		
+		CriteriaQuery<Country> countryCriteriaQuery = criteriaBuilder.createQuery(Country.class); 
+		Root<Country> root = countryCriteriaQuery.from(Country.class);		
+		countryCriteriaQuery.select(root);
+		
+		var query = session.getEntityManagerFactory().createEntityManager()
+				.createQuery(countryCriteriaQuery);
+		
 		var countries = new ArrayList<Country>();
+		
 		try {
 			countries = (ArrayList<Country>) query.getResultList();
 			

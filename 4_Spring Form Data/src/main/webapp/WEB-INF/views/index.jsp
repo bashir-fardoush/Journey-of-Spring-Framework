@@ -104,6 +104,8 @@
 												<td>${student.id}</td>
 												<td>${student.name}</td>
 												<td>${student.email}</td>
+												<td><a href="${pageContext.request.contextPath}/student/edit?id=${student.id}">Edit</a></td>
+												<td><a href="${pageContext.request.contextPath}/student/delete?id=${student.id}">Delete</a></td>
 											</tr>
 
 										</c:forEach>

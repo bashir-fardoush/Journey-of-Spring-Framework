@@ -1,12 +1,14 @@
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
 	pageEncoding="ISO-8859-1"%>
-<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
-<%@ taglib uri="http://www.springframework.org/tags/form" prefix="form"%>
+
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
+
 <!DOCTYPE html>
 <html>
 <head>
 <meta charset="ISO-8859-1">
-<title>Add New Student</title>
+<title>Student Form</title>
 <link rel="stylesheet" type="text/css"
 	href="${pageContext.request.contextPath}/css/bootstrap.min.css">
 <link rel="stylesheet" type="text/css"
@@ -40,7 +42,7 @@
 
 				<div class="row">
 					<div class="col-sm-12 welcome-header">
-						<h2>Add a student with course</h2>
+						<h2>Edit registered Student</h2>
 					</div>
 				</div>
 
@@ -56,16 +58,16 @@
 
 					</div>
 
-					<div class="col-sm-6 col-md-8 col-lg-9 right-content">
-
-
+					<div class="col-sm-6 col-md-8 col-lg-9 right-content">						
 
 						<!-- START of Student Add option -->
 						<div class="row">
 							<div class="col-sm-12">
 								<form:form class="form-group"
-									action="${pageContext.request.contextPath}/student/add"
+									action="${pageContext.request.contextPath}/student/edit"
 									modelAttribute="student">
+									
+									<form:input type="hidden" path="id" value="${student.id}"/>
 
 									<div class="row">
 										<div class="col-md-6">
@@ -79,7 +81,7 @@
 											<div class="form-group col-sm-12">
 												<label for="studentAgeAdd">Age</label>
 												<form:input id="studentAgeAdd" class="form-control"
-													type="text" placeholder="Student Age" path="age" />
+													type="number" placeholder="Student Age" path="age" />
 											</div>
 
 
@@ -132,19 +134,20 @@
 									</div>
 
 									<input type="submit" name="submit" class="btn btn-info"
-										value="Add Student">
+										value="Save Student">
 								</form:form>
 
 							</div>
 						</div>
 
 						<!-- END of Student Add option -->
+						
 
 
-					</div>
 				</div>
-
 			</div>
+
+		</div>
 
 		</div>
 		<!-- main content section end -->
@@ -174,6 +177,5 @@
 
 
 	</section>
-
 </body>
 </html>
