@@ -94,7 +94,7 @@
 
 											<div class="form-group  col-sm-12">
 												<label>Select a country</label>
-												<form:select class="form-control" path="country.countryCode">
+												<form:select class="form-control" path="countryCode">
 													<form:options items="${countries}" itemLabel="countryName"
 														itemValue="countryCode"></form:options>
 												</form:select>

@@ -82,8 +82,6 @@
 													type="text" placeholder="Student Age" path="age" />
 											</div>
 
-
-
 											<div class="form-group col-sm-12">
 												<label for="studentEmailAdd">Email</label>
 												<form:input id="studentEmailAdd" class="form-control"
@@ -92,7 +90,7 @@
 
 											<div class="form-group  col-sm-12">
 												<label>Select a country</label>
-												<form:select class="form-control" path="country.countryCode">
+												<form:select class="form-control" path="countryCode">
 													<form:options items="${countries}" itemLabel="countryName"
 														itemValue="countryCode"></form:options>
 												</form:select>
