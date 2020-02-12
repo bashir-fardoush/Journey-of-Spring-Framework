@@ -153,6 +153,8 @@
 
 		</div>
 		<!-- main content section end -->
+		
+		<a href="${pageContext.request.contextPath}/logout">Logout</a>
 
 
 		<!-- footer section start -->

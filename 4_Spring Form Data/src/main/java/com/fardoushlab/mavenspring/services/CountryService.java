@@ -17,13 +17,12 @@ import org.hibernate.HibernateException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
 
-import com.fardoushlab.mavenspring.config.HibernateConfig;
+import com.fardoushlab.mavenspring.config.persistance.HibernateConfig;
 import com.fardoushlab.mavenspring.exception.ResourceAlreadyExistsException;
 import com.fardoushlab.mavenspring.exception.ResourceNotFoundException;
 import com.fardoushlab.mavenspring.model.Country;
 import com.fardoushlab.mavenspring.model.Course;
 import com.fardoushlab.mavenspring.model.Student;
-import com.mysql.cj.log.Log;
 
 @Service
 public class CountryService {

@@ -8,16 +8,11 @@ import org.springframework.web.bind.annotation.RequestParam;
 @Controller
 public class AppController {
 
-	/*@GetMapping("/index")
-	public String hello() {
-		
-		return "index";		
-	}*/
-	
-	@GetMapping("/userPage")
-	public String showUser(@RequestParam("userName") String userName, Model model){
-		
-		model.addAttribute("userName", userName);		
-		return "userPage";
-	} 
+	  @GetMapping("/login")
+	  public String loginPage(Model model, @RequestParam(name="error", required = false) Boolean error) {
+	  
+		  model.addAttribute("error",error);
+	  return "auth/login"; 
+	  }
+	 
 }

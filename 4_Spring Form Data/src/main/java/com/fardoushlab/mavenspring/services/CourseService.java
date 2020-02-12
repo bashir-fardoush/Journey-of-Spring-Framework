@@ -8,21 +8,23 @@ import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaDelete;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
-import javax.transaction.Transactional;
 
 import org.hibernate.HibernateException;
+import org.springframework.beans.BeanUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
-import com.fardoushlab.mavenspring.config.HibernateConfig;
+import com.fardoushlab.mavenspring.config.persistance.HibernateConfig;
 import com.fardoushlab.mavenspring.exception.ResourceAlreadyExistsException;
 import com.fardoushlab.mavenspring.exception.ResourceNotFoundException;
 import com.fardoushlab.mavenspring.model.Country;
 import com.fardoushlab.mavenspring.model.Course;
 
+
 @Service
 public class CourseService {
-	
 	
 	private HibernateConfig hibernateConfig;
 	
@@ -30,9 +32,9 @@ public class CourseService {
 		super();
 		
 		this.hibernateConfig = hibernateConfig;
-		
 	
 	}
+	
 	
 	/*private void addCourse(String courseCode, String courseName) {
 		var courseObj = new Course();
@@ -64,13 +66,7 @@ public class CourseService {
 		
 		ccq.where(criteriaBuilder.equal(root.get("courseCode"), c.getCourseCode()));
 		var query = session.getEntityManagerFactory().createEntityManager()
-				.createQuery(ccq);
-
-			
-		
-		
-	/*	var query = session.getEntityManagerFactory().createEntityManager().createQuery("select c from com.fardoushlab.mavenspring.model.Course c where courseCode:= courseCode",Course.class);
-		query.setParameter("courseCode", c.getCourseCode());*/
+				.createQuery(ccq);		
 		
 		if(query.getResultStream().findAny().isPresent()) {
 		
@@ -83,10 +79,10 @@ public class CourseService {
 		transection.commit();
 		session.close();
 		
-		
 	}
 	
 
+	
 	
 	public void saveEditedCourse (Course c) {
 		
@@ -105,27 +101,17 @@ public class CourseService {
 			session.close();
 		}
 
-			
-		
-	
-
 	}
 	
-	/*public void deleteCourseByCourseCode(String courseCode) {
-		for(int i = 0; i< courses.size(); i++) {
-			if(courses.get(i).getCourseCode().equals(courseCode)) {
-				courses.remove(i);
-				break;
-			}
-		}
-	}*/
-	
+
 	public Course getCourseByCourseCode(String courseCode) {
 		
 		var session = hibernateConfig.getSession();
 		var transection = session.beginTransaction();
 		
-		var query = session.getEntityManagerFactory().createEntityManager().createQuery("select c from com.fardoushlab.mavenspring.model.Course c where courseCode=: courseCode",Course.class);
+		var query = session.getEntityManagerFactory()
+				.createEntityManager()
+				.createQuery("select c from com.fardoushlab.mavenspring.model.Course c where courseCode=: courseCode",Course.class);
 		query.setParameter("courseCode", courseCode);
 
 	
@@ -147,24 +133,20 @@ public class CourseService {
 
 	
 	public List<Course> getAllCourses(){
-		
-		var session = hibernateConfig.getSession();
-		var transection = session.beginTransaction();		
-  		var query = session.getEntityManagerFactory().createEntityManager().createQuery("select c from com.fardoushlab.mavenspring.model.Course c", Course.class);
-		var courseList =  query.getResultList();
-		
-		transection.commit();
-		session.close();
-		
-		return courseList;
-		/*var courseList = new ArrayList<Course>();
-		
-		courseList.add(new Course(1,"CSE111" ,"P L 1"));
-		courseList.add(new Course(2,"CSE112" ,"P L 2"));
-		
-		return courseList;*/
-		
-	}
+	  
+	  var session = hibernateConfig.getSession(); 
+	  var transection = session.beginTransaction();
+	  
+	  var query = session.getEntityManagerFactory()
+			  .createEntityManager()
+			  .createQuery("select c  from com.fardoushlab.mavenspring.model.Course c", Course.class);
+	  var courseList = query.getResultList();	  
+	  
+	  session.close();
+	  return courseList;
+	  
+	  }
+	 
 	
 	
 	

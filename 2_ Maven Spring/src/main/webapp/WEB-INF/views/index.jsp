@@ -8,7 +8,7 @@
 </head>
 <body>
 
-<h2>Hello Maven</h2>
+<h2>Hello Maven Class 2</h2>
 
 </body>
 </html>

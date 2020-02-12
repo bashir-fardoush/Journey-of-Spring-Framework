@@ -1,4 +1,4 @@
-package com.fardoushlab.mavenspring.config;
+package com.fardoushlab.mavenspring.config.persistance;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -18,27 +18,33 @@ import org.reflections.Reflections;
 
 import javassist.Modifier;
 
-
+@org.springframework.context.annotation.Configuration
 public class HibernateConfig {
 
 	private SessionFactory sessionFactory = null;
 	private Session session = null;
+    
 	
 	public Session getSession() {
-		this.session = createAndGetLocalSessionFactoryBean().getCurrentSession();		
-		return session != null ? this.session : createAndGetLocalSessionFactoryBean().openSession();
 		
+		 this.session = createAndGetLocalSessionFactoryBean().getCurrentSession();
+	        return session != null ? this.session : createAndGetLocalSessionFactoryBean().openSession();
 	}
 	
 	public CriteriaBuilder getCriteriaBuilder() {
 		
 		Session session = getSession();
-		session.beginTransaction();
+		var tx = session.getTransaction();
+        if(!tx.isActive()) {
+        	tx = session.beginTransaction();
+        }
 		return session.getCriteriaBuilder();
 		
 	}
-	
-	private SessionFactory createAndGetLocalSessionFactoryBean() {
+
+
+  
+	public SessionFactory createAndGetLocalSessionFactoryBean() {
 		
 		if(this.sessionFactory == null) {
 			
@@ -61,15 +67,13 @@ public class HibernateConfig {
 				
 				sessionFactory = configuration.buildSessionFactory(serviceRegistryBuilder.build());
 			} catch (MappingException e) {
-				// TODO Auto-generated catch block
+			
 				e.printStackTrace();
 			} catch (HibernateException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}	catch(Exception e) {
 				e.printStackTrace();
-			}		
-			
+			}					
 		}		
 		
 		return sessionFactory;
@@ -90,7 +94,6 @@ public class HibernateConfig {
 		
 		return properties;
 	}
-
-	
+ 	
 	
 }

@@ -34,6 +34,14 @@ public class StudentController {
 	CountryService countryService;
 	
 	
+	@GetMapping("/")
+	public String getHomePage(Model model) {	
+		
+		return "redirect:index";		
+		
+	}
+	
+	
 
 	@GetMapping("/index")
 	public String getStudentPage(Model model) {		
@@ -43,16 +51,14 @@ public class StudentController {
 		var studentBasicDtoList = new ArrayList<StudentBasicDto>();
 		studentBasicDtoList = (ArrayList<StudentBasicDto>) studentService.getStudentList();	
 		
-		var studentList = new ArrayList<Student>();		
-		
+		var studentList = new ArrayList<Student>();				
 		studentBasicDtoList.forEach(dto->{
 			var student = new Student();
 			BeanUtils.copyProperties(dto, student);
 			studentList.add(student);
 		});
 		
-		model.addAttribute("student_list",studentList);
-		
+		model.addAttribute("student_list",studentList);		
 		return "index";		
 	}
 	

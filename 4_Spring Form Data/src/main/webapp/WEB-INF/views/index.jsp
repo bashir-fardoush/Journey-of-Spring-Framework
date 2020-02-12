@@ -24,7 +24,6 @@
 
 				<div class="row">
 					<div class="col-sm-12 col-md-12 col-lg-12">
-
 						<img
 							src="${pageContext.request.contextPath}/images/educationbanner.jpg"
 							width="100%" height="200px" />

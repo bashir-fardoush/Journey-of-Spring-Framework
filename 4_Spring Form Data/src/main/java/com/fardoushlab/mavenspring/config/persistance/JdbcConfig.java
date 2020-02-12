@@ -1,4 +1,4 @@
-package com.fardoushlab.mavenspring.config;
+package com.fardoushlab.mavenspring.config.persistance;
 
 import java.util.HashMap;
 

@@ -15,7 +15,7 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.fardoushlab.mavenspring.config.HibernateConfig;
+import com.fardoushlab.mavenspring.config.persistance.HibernateConfig;
 import com.fardoushlab.mavenspring.dtos.StudentBasicDto;
 import com.fardoushlab.mavenspring.dtos.StudentDto;
 import com.fardoushlab.mavenspring.exception.ResourceNotFoundException;
@@ -105,14 +105,12 @@ public class StudentService {
 			trans = session.beginTransaction();
 		}
 		
-		try {
-						
+		try {						
 			session.update(student);
 			trans.commit();
 			
 		}catch(HibernateException e) {
-			if(trans!= null) {
-				
+			if(trans!= null) {				
 				trans.rollback();
 			}
 			
